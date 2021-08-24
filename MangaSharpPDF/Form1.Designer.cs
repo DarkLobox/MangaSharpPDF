@@ -36,6 +36,9 @@ namespace MangaSharpPDF
             this.opcion3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelImagenes = new System.Windows.Forms.Panel();
             this.panelControles = new System.Windows.Forms.Panel();
+            this.btnLimpiar = new System.Windows.Forms.Button();
+            this.inputCarpetaOrigen = new System.Windows.Forms.RichTextBox();
+            this.prbGenerarPDF = new System.Windows.Forms.ProgressBar();
             this.btnAgregarCarpetaOrigen = new System.Windows.Forms.Button();
             this.btnBuscarCarpetaDestino = new System.Windows.Forms.Button();
             this.inputCarpetaDestino = new System.Windows.Forms.TextBox();
@@ -45,7 +48,6 @@ namespace MangaSharpPDF
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.inputNombrePDF = new System.Windows.Forms.TextBox();
-            this.inputCarpetaOrigen = new System.Windows.Forms.TextBox();
             this.menu.SuspendLayout();
             this.panelControles.SuspendLayout();
             this.SuspendLayout();
@@ -56,7 +58,7 @@ namespace MangaSharpPDF
             this.cboxArchivo});
             this.menu.Location = new System.Drawing.Point(0, 0);
             this.menu.Name = "menu";
-            this.menu.Size = new System.Drawing.Size(714, 24);
+            this.menu.Size = new System.Drawing.Size(811, 24);
             this.menu.TabIndex = 0;
             this.menu.Text = "menuStrip1";
             // 
@@ -95,12 +97,15 @@ namespace MangaSharpPDF
             this.panelImagenes.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelImagenes.Location = new System.Drawing.Point(0, 24);
             this.panelImagenes.Name = "panelImagenes";
-            this.panelImagenes.Size = new System.Drawing.Size(714, 387);
+            this.panelImagenes.Size = new System.Drawing.Size(811, 387);
             this.panelImagenes.TabIndex = 1;
             // 
             // panelControles
             // 
             this.panelControles.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.panelControles.Controls.Add(this.btnLimpiar);
+            this.panelControles.Controls.Add(this.inputCarpetaOrigen);
+            this.panelControles.Controls.Add(this.prbGenerarPDF);
             this.panelControles.Controls.Add(this.btnAgregarCarpetaOrigen);
             this.panelControles.Controls.Add(this.btnBuscarCarpetaDestino);
             this.panelControles.Controls.Add(this.inputCarpetaDestino);
@@ -110,17 +115,41 @@ namespace MangaSharpPDF
             this.panelControles.Controls.Add(this.label2);
             this.panelControles.Controls.Add(this.label1);
             this.panelControles.Controls.Add(this.inputNombrePDF);
-            this.panelControles.Controls.Add(this.inputCarpetaOrigen);
             this.panelControles.Cursor = System.Windows.Forms.Cursors.Default;
             this.panelControles.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panelControles.Location = new System.Drawing.Point(465, 24);
+            this.panelControles.Location = new System.Drawing.Point(473, 24);
             this.panelControles.Name = "panelControles";
-            this.panelControles.Size = new System.Drawing.Size(249, 387);
+            this.panelControles.Size = new System.Drawing.Size(338, 387);
             this.panelControles.TabIndex = 2;
+            // 
+            // btnLimpiar
+            // 
+            this.btnLimpiar.Location = new System.Drawing.Point(216, 127);
+            this.btnLimpiar.Name = "btnLimpiar";
+            this.btnLimpiar.Size = new System.Drawing.Size(75, 23);
+            this.btnLimpiar.TabIndex = 12;
+            this.btnLimpiar.Text = "Limpiar";
+            this.btnLimpiar.UseVisualStyleBackColor = true;
+            this.btnLimpiar.Click += new System.EventHandler(this.btnLimpiar_Click);
+            // 
+            // inputCarpetaOrigen
+            // 
+            this.inputCarpetaOrigen.Location = new System.Drawing.Point(15, 26);
+            this.inputCarpetaOrigen.Name = "inputCarpetaOrigen";
+            this.inputCarpetaOrigen.Size = new System.Drawing.Size(310, 91);
+            this.inputCarpetaOrigen.TabIndex = 11;
+            this.inputCarpetaOrigen.Text = "";
+            // 
+            // prbGenerarPDF
+            // 
+            this.prbGenerarPDF.Location = new System.Drawing.Point(17, 296);
+            this.prbGenerarPDF.Name = "prbGenerarPDF";
+            this.prbGenerarPDF.Size = new System.Drawing.Size(309, 23);
+            this.prbGenerarPDF.TabIndex = 10;
             // 
             // btnAgregarCarpetaOrigen
             // 
-            this.btnAgregarCarpetaOrigen.Location = new System.Drawing.Point(98, 59);
+            this.btnAgregarCarpetaOrigen.Location = new System.Drawing.Point(135, 127);
             this.btnAgregarCarpetaOrigen.Name = "btnAgregarCarpetaOrigen";
             this.btnAgregarCarpetaOrigen.Size = new System.Drawing.Size(75, 23);
             this.btnAgregarCarpetaOrigen.TabIndex = 9;
@@ -130,7 +159,7 @@ namespace MangaSharpPDF
             // 
             // btnBuscarCarpetaDestino
             // 
-            this.btnBuscarCarpetaDestino.Location = new System.Drawing.Point(16, 189);
+            this.btnBuscarCarpetaDestino.Location = new System.Drawing.Point(16, 256);
             this.btnBuscarCarpetaDestino.Name = "btnBuscarCarpetaDestino";
             this.btnBuscarCarpetaDestino.Size = new System.Drawing.Size(75, 23);
             this.btnBuscarCarpetaDestino.TabIndex = 8;
@@ -140,15 +169,15 @@ namespace MangaSharpPDF
             // 
             // inputCarpetaDestino
             // 
-            this.inputCarpetaDestino.Location = new System.Drawing.Point(16, 163);
+            this.inputCarpetaDestino.Location = new System.Drawing.Point(16, 231);
             this.inputCarpetaDestino.Name = "inputCarpetaDestino";
-            this.inputCarpetaDestino.Size = new System.Drawing.Size(208, 20);
+            this.inputCarpetaDestino.Size = new System.Drawing.Size(310, 20);
             this.inputCarpetaDestino.TabIndex = 7;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(14, 147);
+            this.label3.Location = new System.Drawing.Point(14, 214);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(83, 13);
             this.label3.TabIndex = 6;
@@ -156,7 +185,7 @@ namespace MangaSharpPDF
             // 
             // btnBuscarCarpetaOrigen
             // 
-            this.btnBuscarCarpetaOrigen.Location = new System.Drawing.Point(16, 60);
+            this.btnBuscarCarpetaOrigen.Location = new System.Drawing.Point(54, 127);
             this.btnBuscarCarpetaOrigen.Name = "btnBuscarCarpetaOrigen";
             this.btnBuscarCarpetaOrigen.Size = new System.Drawing.Size(75, 23);
             this.btnBuscarCarpetaOrigen.TabIndex = 5;
@@ -166,7 +195,7 @@ namespace MangaSharpPDF
             // 
             // btnGenerarPDF
             // 
-            this.btnGenerarPDF.Location = new System.Drawing.Point(77, 252);
+            this.btnGenerarPDF.Location = new System.Drawing.Point(124, 325);
             this.btnGenerarPDF.Name = "btnGenerarPDF";
             this.btnGenerarPDF.Size = new System.Drawing.Size(98, 23);
             this.btnGenerarPDF.TabIndex = 4;
@@ -177,7 +206,7 @@ namespace MangaSharpPDF
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(14, 97);
+            this.label2.Location = new System.Drawing.Point(14, 163);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(83, 13);
             this.label2.TabIndex = 3;
@@ -186,7 +215,7 @@ namespace MangaSharpPDF
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 18);
+            this.label1.Location = new System.Drawing.Point(12, 10);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(84, 13);
             this.label1.TabIndex = 2;
@@ -195,23 +224,15 @@ namespace MangaSharpPDF
             // 
             // inputNombrePDF
             // 
-            this.inputNombrePDF.Location = new System.Drawing.Point(16, 113);
+            this.inputNombrePDF.Location = new System.Drawing.Point(16, 181);
             this.inputNombrePDF.Name = "inputNombrePDF";
-            this.inputNombrePDF.Size = new System.Drawing.Size(208, 20);
+            this.inputNombrePDF.Size = new System.Drawing.Size(310, 20);
             this.inputNombrePDF.TabIndex = 1;
-            // 
-            // inputCarpetaOrigen
-            // 
-            this.inputCarpetaOrigen.Location = new System.Drawing.Point(16, 34);
-            this.inputCarpetaOrigen.Name = "inputCarpetaOrigen";
-            this.inputCarpetaOrigen.Size = new System.Drawing.Size(208, 20);
-            this.inputCarpetaOrigen.TabIndex = 0;
-            this.inputCarpetaOrigen.DragEnter += new System.Windows.Forms.DragEventHandler(this.inputCarpetaOrigen_DragEnter);
             // 
             // MangaSharpPDF
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(714, 411);
+            this.ClientSize = new System.Drawing.Size(811, 411);
             this.Controls.Add(this.panelControles);
             this.Controls.Add(this.panelImagenes);
             this.Controls.Add(this.menu);
@@ -235,7 +256,6 @@ namespace MangaSharpPDF
         private System.Windows.Forms.Panel panelImagenes;
         private System.Windows.Forms.Panel panelControles;
         private System.Windows.Forms.TextBox inputNombrePDF;
-        private System.Windows.Forms.TextBox inputCarpetaOrigen;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnGenerarPDF;
         private System.Windows.Forms.Label label2;
@@ -248,6 +268,9 @@ namespace MangaSharpPDF
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnBuscarCarpetaDestino;
         private System.Windows.Forms.Button btnAgregarCarpetaOrigen;
+        private System.Windows.Forms.RichTextBox inputCarpetaOrigen;
+        private System.Windows.Forms.ProgressBar prbGenerarPDF;
+        private System.Windows.Forms.Button btnLimpiar;
     }
 }
 

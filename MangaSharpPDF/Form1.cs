@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -92,7 +93,7 @@ namespace MangaSharpPDF
             image = iTextSharp.text.Image.GetInstance(imagenes[0]);
             EstablecerDimensiones(doc, image);
 
-            // Arir pdf
+            // Abrir pdf
             doc.Open();
 
             //Escribir contenido del pdf
@@ -103,7 +104,9 @@ namespace MangaSharpPDF
                 {
                     image = iTextSharp.text.Image.GetInstance(imagenes[i]);
                     EstablecerDimensiones(doc, image);
+                    doc.NewPage();
                     doc.Add(image);
+                    
                 }
             }
 
@@ -120,6 +123,7 @@ namespace MangaSharpPDF
                 doc.SetPageSize(dimensiones[configuraciones[0]]);
                 image.ScaleAbsoluteWidth(dimensiones[configuraciones[0]].Width);
                 image.ScaleAbsoluteHeight(dimensiones[configuraciones[0]].Height);
+                Debug.WriteLine("Ancho: " + dimensiones[configuraciones[0]].Width + " Largo: " + dimensiones[configuraciones[0]].Height);
             }
             //1 o 2
             if (image.Width >= image.Height)
@@ -127,21 +131,19 @@ namespace MangaSharpPDF
                 doc.SetPageSize(dimensiones[configuraciones[1]]);
                 image.ScaleAbsoluteWidth(dimensiones[configuraciones[1]].Width);
                 image.ScaleAbsoluteHeight(dimensiones[configuraciones[1]].Height);
+                Debug.WriteLine("Ancho: " + dimensiones[configuraciones[1]].Width + " Largo: " + dimensiones[configuraciones[1]].Height);
             }
 
         }
 
         private void inputCarpetaOrigen_DragEnter(object sender, DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                foreach (string filePath in files)
-                {
-                    inputCarpetaOrigen.Text = filePath;
-                    inputNombrePDF.Text = inputCarpetaOrigen.Text.Substring(inputCarpetaOrigen.Text.LastIndexOf("\\") + 1);
-                }
-            }
+            
+        }
+
+        private void btnLimpiar_Click(object sender, EventArgs e)
+        {
+            inputCarpetaOrigen.Text = "";
         }
     }
 }
