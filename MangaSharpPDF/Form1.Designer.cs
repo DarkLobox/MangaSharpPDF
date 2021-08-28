@@ -29,6 +29,7 @@ namespace MangaSharpPDF
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MangaSharpPDF));
             this.panelImagenes = new System.Windows.Forms.Panel();
             this.panelControles = new System.Windows.Forms.Panel();
             this.inputCarpetaOrigen = new System.Windows.Forms.TextBox();
@@ -319,6 +320,7 @@ namespace MangaSharpPDF
             this.Controls.Add(this.panelImagenes);
             this.Controls.Add(this.panelControles);
             this.Controls.Add(this.panelBarra);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.IsMdiContainer = true;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(730, 489);
