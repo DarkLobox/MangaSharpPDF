@@ -42,22 +42,11 @@ namespace MangaSharpPDF
 
         }
 
-        private void btnBuscarCarpeta_Click(object sender, EventArgs e)
-        {
-            FolderBrowserDialog folderBrowser = new FolderBrowserDialog();
-            if (folderBrowser.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(folderBrowser.SelectedPath))
-            {
-                inputCarpetaOrigen.Text = folderBrowser.SelectedPath;
-                inputNombrePDF.Text = inputCarpetaOrigen.Text.Substring(inputCarpetaOrigen.Text.LastIndexOf("\\") + 1);
-            }
-        }
-
         private void btnGenerarPDF_Click(object sender, EventArgs e)
         {
             if (inputCarpetaOrigen.Text.Equals("")==false && inputCarpetaDestino.Text.Equals("")==false && inputNombrePDF.Text.Equals("")==false)
             {
                 generarPDF(inputCarpetaOrigen.Text, inputCarpetaDestino.Text, inputNombrePDF.Text);
-                MessageBox.Show("Generacion de PDF terminada", "Mensaje");
             }
         }
 
@@ -72,15 +61,35 @@ namespace MangaSharpPDF
 
         private void btnAgregarCarpetaOrigen_Click(object sender, EventArgs e)
         {
-
+            FolderBrowserDialog folderBrowser = new FolderBrowserDialog();
+            if (folderBrowser.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(folderBrowser.SelectedPath))
+            {
+                inputCarpetaOrigen.Text += folderBrowser.SelectedPath + "\r\n";
+                if (inputNombrePDF.Text.CompareTo("")==0)
+                {
+                    inputNombrePDF.Text = folderBrowser.SelectedPath.Substring(folderBrowser.SelectedPath.LastIndexOf("\\") + 1);
+                }
+            }
         }
 
         void generarPDF(string origen, string destino, string nombre)
         {
             //Variables
             iTextSharp.text.Image image;
-            //Archivos de directorio
-            string[] imagenes = Directory.GetFiles(origen);
+
+            prbGenerarPDF.Value = 0;
+
+            //Tratamiento de rutas
+            string origenTemp = origen; //copia de las rutas
+            string[] imagenes = new string[0]; //rutas de imagenes
+
+            while (origenTemp.IndexOf("\r\n")!=-1)
+            {
+                string rutaTemp = origenTemp.Substring(0, origenTemp.IndexOf("\r\n"));
+                origenTemp = origenTemp.Substring(origenTemp.IndexOf("\r\n")+2);
+                imagenes = imagenes.Concat(Directory.GetFiles(rutaTemp)).ToArray(); //combinar string[] de imagenes
+            }
+
             //Creacion de doc sin tamaño de pagina definido
             Document doc = new Document();
             //Creacion del archivo pdf
@@ -91,7 +100,7 @@ namespace MangaSharpPDF
 
             //Establecer dimension primera pagina
             image = iTextSharp.text.Image.GetInstance(imagenes[0]);
-            EstablecerDimensiones(doc, image);
+            //EstablecerDimensiones(doc, image);
 
             // Abrir pdf
             doc.Open();
@@ -106,7 +115,7 @@ namespace MangaSharpPDF
                     EstablecerDimensiones(doc, image);
                     doc.NewPage();
                     doc.Add(image);
-                    
+                    prbGenerarPDF.Value = ((i + 1) * 100) / imagenes.Length;
                 }
             }
 
@@ -123,7 +132,7 @@ namespace MangaSharpPDF
                 doc.SetPageSize(dimensiones[configuraciones[0]]);
                 image.ScaleAbsoluteWidth(dimensiones[configuraciones[0]].Width);
                 image.ScaleAbsoluteHeight(dimensiones[configuraciones[0]].Height);
-                Debug.WriteLine("Ancho: " + dimensiones[configuraciones[0]].Width + " Largo: " + dimensiones[configuraciones[0]].Height);
+                //Debug.WriteLine("Ancho: " + dimensiones[configuraciones[0]].Width + " Largo: " + dimensiones[configuraciones[0]].Height);
             }
             //1 o 2
             if (image.Width >= image.Height)
@@ -131,19 +140,48 @@ namespace MangaSharpPDF
                 doc.SetPageSize(dimensiones[configuraciones[1]]);
                 image.ScaleAbsoluteWidth(dimensiones[configuraciones[1]].Width);
                 image.ScaleAbsoluteHeight(dimensiones[configuraciones[1]].Height);
-                Debug.WriteLine("Ancho: " + dimensiones[configuraciones[1]].Width + " Largo: " + dimensiones[configuraciones[1]].Height);
+                //Debug.WriteLine("Ancho: " + dimensiones[configuraciones[1]].Width + " Largo: " + dimensiones[configuraciones[1]].Height);
             }
 
-        }
-
-        private void inputCarpetaOrigen_DragEnter(object sender, DragEventArgs e)
-        {
-            
         }
 
         private void btnLimpiar_Click(object sender, EventArgs e)
         {
             inputCarpetaOrigen.Text = "";
+            inputNombrePDF.Text = "";
+        }
+
+        private void inputCarpetaOrigen_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.All;
+        }
+
+        private void inputCarpetaOrigen_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] carpetas = (String[])e.Data.GetData(DataFormats.FileDrop, false);
+            for (int i=0;i<carpetas.Length;i++)
+            {
+                FileAttributes dir = File.GetAttributes(carpetas[i]);
+                if (dir.HasFlag(FileAttributes.Directory)) //Es un directorio
+                {
+                    inputCarpetaOrigen.Text += carpetas[i] + "\r\n";
+                    if (inputNombrePDF.Text.CompareTo("") == 0)
+                    {
+                        inputNombrePDF.Text = carpetas[i].Substring(carpetas[i].LastIndexOf("\\") + 1);
+                    }
+                }
+            }
+        }
+
+        private void inputCarpetaDestino_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.All;
+        }
+
+        private void inputCarpetaDestino_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] carpetas = (String[])e.Data.GetData(DataFormats.FileDrop, false);
+            inputCarpetaDestino.Text = carpetas[0];
         }
     }
 }
