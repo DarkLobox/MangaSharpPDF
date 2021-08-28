@@ -43,7 +43,7 @@ namespace MangaSharpPDF
             this.label1 = new System.Windows.Forms.Label();
             this.inputNombrePDF = new System.Windows.Forms.TextBox();
             this.panelBarra = new System.Windows.Forms.Panel();
-            this.btnMini = new System.Windows.Forms.Button();
+            this.btnRestaurar = new System.Windows.Forms.Button();
             this.btnMaximizar = new System.Windows.Forms.Button();
             this.btnMinimizar = new System.Windows.Forms.Button();
             this.btnCerrar = new System.Windows.Forms.Button();
@@ -57,7 +57,7 @@ namespace MangaSharpPDF
             this.panelImagenes.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelImagenes.Location = new System.Drawing.Point(0, 31);
             this.panelImagenes.Name = "panelImagenes";
-            this.panelImagenes.Size = new System.Drawing.Size(473, 419);
+            this.panelImagenes.Size = new System.Drawing.Size(376, 442);
             this.panelImagenes.TabIndex = 1;
             // 
             // panelControles
@@ -76,15 +76,16 @@ namespace MangaSharpPDF
             this.panelControles.Controls.Add(this.inputNombrePDF);
             this.panelControles.Cursor = System.Windows.Forms.Cursors.Default;
             this.panelControles.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panelControles.Location = new System.Drawing.Point(473, 31);
+            this.panelControles.Location = new System.Drawing.Point(376, 31);
             this.panelControles.Name = "panelControles";
-            this.panelControles.Size = new System.Drawing.Size(338, 419);
+            this.panelControles.Size = new System.Drawing.Size(338, 442);
             this.panelControles.TabIndex = 2;
             // 
             // inputCarpetaOrigen
             // 
             this.inputCarpetaOrigen.AllowDrop = true;
             this.inputCarpetaOrigen.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.inputCarpetaOrigen.Font = new System.Drawing.Font("Century Schoolbook", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.inputCarpetaOrigen.Location = new System.Drawing.Point(17, 46);
             this.inputCarpetaOrigen.Multiline = true;
             this.inputCarpetaOrigen.Name = "inputCarpetaOrigen";
@@ -96,7 +97,7 @@ namespace MangaSharpPDF
             // 
             // btnLimpiar
             // 
-            this.btnLimpiar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(49)))), ((int)(((byte)(69)))));
+            this.btnLimpiar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(120)))));
             this.btnLimpiar.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnLimpiar.FlatAppearance.BorderSize = 0;
             this.btnLimpiar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -120,7 +121,7 @@ namespace MangaSharpPDF
             // 
             // btnAgregarCarpetaOrigen
             // 
-            this.btnAgregarCarpetaOrigen.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(49)))), ((int)(((byte)(69)))));
+            this.btnAgregarCarpetaOrigen.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(120)))));
             this.btnAgregarCarpetaOrigen.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnAgregarCarpetaOrigen.FlatAppearance.BorderSize = 0;
             this.btnAgregarCarpetaOrigen.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -136,7 +137,7 @@ namespace MangaSharpPDF
             // 
             // btnBuscarCarpetaDestino
             // 
-            this.btnBuscarCarpetaDestino.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(49)))), ((int)(((byte)(69)))));
+            this.btnBuscarCarpetaDestino.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(120)))));
             this.btnBuscarCarpetaDestino.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnBuscarCarpetaDestino.FlatAppearance.BorderSize = 0;
             this.btnBuscarCarpetaDestino.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -154,9 +155,10 @@ namespace MangaSharpPDF
             // 
             this.inputCarpetaDestino.AllowDrop = true;
             this.inputCarpetaDestino.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.inputCarpetaDestino.Font = new System.Drawing.Font("Century Schoolbook", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.inputCarpetaDestino.Location = new System.Drawing.Point(16, 271);
             this.inputCarpetaDestino.Name = "inputCarpetaDestino";
-            this.inputCarpetaDestino.Size = new System.Drawing.Size(310, 20);
+            this.inputCarpetaDestino.Size = new System.Drawing.Size(310, 21);
             this.inputCarpetaDestino.TabIndex = 7;
             this.inputCarpetaDestino.DragDrop += new System.Windows.Forms.DragEventHandler(this.inputCarpetaDestino_DragDrop);
             this.inputCarpetaDestino.DragEnter += new System.Windows.Forms.DragEventHandler(this.inputCarpetaDestino_DragEnter);
@@ -174,7 +176,7 @@ namespace MangaSharpPDF
             // 
             // btnGenerarPDF
             // 
-            this.btnGenerarPDF.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(49)))), ((int)(((byte)(69)))));
+            this.btnGenerarPDF.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(120)))));
             this.btnGenerarPDF.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnGenerarPDF.FlatAppearance.BorderSize = 0;
             this.btnGenerarPDF.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -214,42 +216,49 @@ namespace MangaSharpPDF
             // inputNombrePDF
             // 
             this.inputNombrePDF.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.inputNombrePDF.Font = new System.Drawing.Font("Century Schoolbook", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.inputNombrePDF.Location = new System.Drawing.Point(16, 214);
             this.inputNombrePDF.Name = "inputNombrePDF";
-            this.inputNombrePDF.Size = new System.Drawing.Size(310, 20);
+            this.inputNombrePDF.Size = new System.Drawing.Size(310, 21);
             this.inputNombrePDF.TabIndex = 1;
             // 
             // panelBarra
             // 
             this.panelBarra.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(76)))), ((int)(((byte)(75)))), ((int)(((byte)(105)))));
-            this.panelBarra.Controls.Add(this.btnMini);
+            this.panelBarra.Controls.Add(this.btnRestaurar);
             this.panelBarra.Controls.Add(this.btnMaximizar);
             this.panelBarra.Controls.Add(this.btnMinimizar);
             this.panelBarra.Controls.Add(this.btnCerrar);
+            this.panelBarra.Cursor = System.Windows.Forms.Cursors.SizeAll;
             this.panelBarra.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelBarra.Location = new System.Drawing.Point(0, 0);
             this.panelBarra.Name = "panelBarra";
-            this.panelBarra.Size = new System.Drawing.Size(811, 31);
+            this.panelBarra.Size = new System.Drawing.Size(714, 31);
             this.panelBarra.TabIndex = 3;
+            this.panelBarra.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelBarra_MouseDown);
             // 
-            // btnMini
+            // btnRestaurar
             // 
-            this.btnMini.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(76)))), ((int)(((byte)(105)))));
-            this.btnMini.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnMini.FlatAppearance.BorderSize = 0;
-            this.btnMini.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMini.Font = new System.Drawing.Font("Century", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnMini.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.btnMini.Image = global::MangaSharpPDF.Properties.Resources.menos;
-            this.btnMini.Location = new System.Drawing.Point(682, 4);
-            this.btnMini.Margin = new System.Windows.Forms.Padding(0);
-            this.btnMini.Name = "btnMini";
-            this.btnMini.Size = new System.Drawing.Size(32, 21);
-            this.btnMini.TabIndex = 3;
-            this.btnMini.UseVisualStyleBackColor = false;
+            this.btnRestaurar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnRestaurar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(76)))), ((int)(((byte)(105)))));
+            this.btnRestaurar.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnRestaurar.FlatAppearance.BorderSize = 0;
+            this.btnRestaurar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRestaurar.Font = new System.Drawing.Font("Century", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRestaurar.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.btnRestaurar.Image = global::MangaSharpPDF.Properties.Resources.menos;
+            this.btnRestaurar.Location = new System.Drawing.Point(647, 4);
+            this.btnRestaurar.Margin = new System.Windows.Forms.Padding(0);
+            this.btnRestaurar.Name = "btnRestaurar";
+            this.btnRestaurar.Size = new System.Drawing.Size(32, 21);
+            this.btnRestaurar.TabIndex = 3;
+            this.btnRestaurar.UseVisualStyleBackColor = false;
+            this.btnRestaurar.Visible = false;
+            this.btnRestaurar.Click += new System.EventHandler(this.btnRestaurar_Click);
             // 
             // btnMaximizar
             // 
+            this.btnMaximizar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnMaximizar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(76)))), ((int)(((byte)(105)))));
             this.btnMaximizar.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnMaximizar.FlatAppearance.BorderSize = 0;
@@ -257,15 +266,17 @@ namespace MangaSharpPDF
             this.btnMaximizar.Font = new System.Drawing.Font("Century", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMaximizar.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.btnMaximizar.Image = global::MangaSharpPDF.Properties.Resources.maxi;
-            this.btnMaximizar.Location = new System.Drawing.Point(746, 4);
+            this.btnMaximizar.Location = new System.Drawing.Point(647, 4);
             this.btnMaximizar.Margin = new System.Windows.Forms.Padding(0);
             this.btnMaximizar.Name = "btnMaximizar";
             this.btnMaximizar.Size = new System.Drawing.Size(32, 21);
             this.btnMaximizar.TabIndex = 2;
             this.btnMaximizar.UseVisualStyleBackColor = false;
+            this.btnMaximizar.Click += new System.EventHandler(this.btnMaximizar_Click);
             // 
             // btnMinimizar
             // 
+            this.btnMinimizar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnMinimizar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(76)))), ((int)(((byte)(105)))));
             this.btnMinimizar.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnMinimizar.FlatAppearance.BorderSize = 0;
@@ -273,15 +284,17 @@ namespace MangaSharpPDF
             this.btnMinimizar.Font = new System.Drawing.Font("Century", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMinimizar.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.btnMinimizar.Image = global::MangaSharpPDF.Properties.Resources.mini;
-            this.btnMinimizar.Location = new System.Drawing.Point(714, 4);
+            this.btnMinimizar.Location = new System.Drawing.Point(617, 4);
             this.btnMinimizar.Margin = new System.Windows.Forms.Padding(0);
             this.btnMinimizar.Name = "btnMinimizar";
             this.btnMinimizar.Size = new System.Drawing.Size(32, 21);
             this.btnMinimizar.TabIndex = 1;
             this.btnMinimizar.UseVisualStyleBackColor = false;
+            this.btnMinimizar.Click += new System.EventHandler(this.btnMinimizar_Click);
             // 
             // btnCerrar
             // 
+            this.btnCerrar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCerrar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(76)))), ((int)(((byte)(105)))));
             this.btnCerrar.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnCerrar.FlatAppearance.BorderSize = 0;
@@ -289,7 +302,7 @@ namespace MangaSharpPDF
             this.btnCerrar.Font = new System.Drawing.Font("Century", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCerrar.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.btnCerrar.Image = global::MangaSharpPDF.Properties.Resources.cerrar;
-            this.btnCerrar.Location = new System.Drawing.Point(776, 4);
+            this.btnCerrar.Location = new System.Drawing.Point(679, 4);
             this.btnCerrar.Margin = new System.Windows.Forms.Padding(0);
             this.btnCerrar.Name = "btnCerrar";
             this.btnCerrar.Size = new System.Drawing.Size(32, 21);
@@ -300,15 +313,17 @@ namespace MangaSharpPDF
             // MangaSharpPDF
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(811, 450);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(76)))), ((int)(((byte)(75)))), ((int)(((byte)(105)))));
+            this.ClientSize = new System.Drawing.Size(714, 473);
+            this.ControlBox = false;
             this.Controls.Add(this.panelImagenes);
             this.Controls.Add(this.panelControles);
             this.Controls.Add(this.panelBarra);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.MinimumSize = new System.Drawing.Size(730, 450);
+            this.IsMdiContainer = true;
+            this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(730, 489);
             this.Name = "MangaSharpPDF";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "MangaSharpPDF";
             this.Load += new System.EventHandler(this.MangaSharpPDF_Load);
             this.panelControles.ResumeLayout(false);
             this.panelControles.PerformLayout();
@@ -333,7 +348,7 @@ namespace MangaSharpPDF
         private System.Windows.Forms.TextBox inputCarpetaOrigen;
         private System.Windows.Forms.Panel panelBarra;
         private System.Windows.Forms.Button btnCerrar;
-        private System.Windows.Forms.Button btnMini;
+        private System.Windows.Forms.Button btnRestaurar;
         private System.Windows.Forms.Button btnMaximizar;
         private System.Windows.Forms.Button btnMinimizar;
     }
