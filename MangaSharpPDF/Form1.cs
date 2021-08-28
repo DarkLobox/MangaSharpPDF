@@ -28,6 +28,13 @@ namespace MangaSharpPDF
         static int[] configuraciones = { 0, 2 }; //A4 Ancho de pagina uniforme
         //static int[] configuraciones = { 0, 1 }; //A4 horizontal y vertical
 
+        //Procesamiento
+        PictureBox[] boxImagenes;
+        string[] imagenes = new string[0];
+
+        //Formato de imagenes permitidos
+        public static readonly List<string> ImageExtensions = new List<string> { ".JPG", ".JPE", ".BMP", ".GIF", ".PNG" };
+
 
         //Movimiento de ventana
         [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
@@ -41,19 +48,9 @@ namespace MangaSharpPDF
             this.MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void toolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void btnGenerarPDF_Click(object sender, EventArgs e)
         {
-            if (inputCarpetaOrigen.Text.Equals("")==false && inputCarpetaDestino.Text.Equals("")==false && inputNombrePDF.Text.Equals("")==false)
+            if (inputCarpetaOrigen.Text.Equals("") == false && inputCarpetaDestino.Text.Equals("") == false && inputNombrePDF.Text.Equals("") == false)
             {
                 generarPDF(inputCarpetaOrigen.Text, inputCarpetaDestino.Text, inputNombrePDF.Text);
             }
@@ -71,7 +68,7 @@ namespace MangaSharpPDF
         private void btnAgregarCarpetaOrigen_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog folderBrowser = new FolderBrowserDialog();
-            if (folderBrowser.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(folderBrowser.SelectedPath))
+            if (folderBrowser.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(folderBrowser.SelectedPath) && inputCarpetaOrigen.Text.IndexOf(folderBrowser.SelectedPath) == -1)
             {
                 inputCarpetaOrigen.Text += folderBrowser.SelectedPath + "\r\n";
                 if (inputNombrePDF.Text.CompareTo("")==0)
@@ -79,6 +76,8 @@ namespace MangaSharpPDF
                     inputNombrePDF.Text = folderBrowser.SelectedPath.Substring(folderBrowser.SelectedPath.LastIndexOf("\\") + 1);
                 }
             }
+            procesarRutas();
+            mostrarMiniaturas();
         }
 
         void generarPDF(string origen, string destino, string nombre)
@@ -87,17 +86,6 @@ namespace MangaSharpPDF
             iTextSharp.text.Image image;
 
             prbGenerarPDF.Value = 0;
-
-            //Tratamiento de rutas
-            string origenTemp = origen; //copia de las rutas
-            string[] imagenes = new string[0]; //rutas de imagenes
-
-            while (origenTemp.IndexOf("\r\n")!=-1)
-            {
-                string rutaTemp = origenTemp.Substring(0, origenTemp.IndexOf("\r\n"));
-                origenTemp = origenTemp.Substring(origenTemp.IndexOf("\r\n")+2);
-                imagenes = imagenes.Concat(Directory.GetFiles(rutaTemp)).ToArray(); //combinar string[] de imagenes
-            }
 
             //Creacion de doc sin tamaño de pagina definido
             Document doc = new Document();
@@ -118,7 +106,7 @@ namespace MangaSharpPDF
             for (int i = 0; i < imagenes.Length; i++)
             {
                 //Formatos permitidos
-                if (imagenes[i].IndexOf(".jpg") != -1 || imagenes[i].IndexOf(".JPG") != -1 || imagenes[i].IndexOf(".png") != -1 || imagenes[i].IndexOf(".PNG") != -1 || imagenes[i].IndexOf(".jpeg") != -1 || imagenes[i].IndexOf(".JPEG") != -1)
+                if (ImageExtensions.Contains(Path.GetExtension(imagenes[i]).ToUpperInvariant()))
                 {
                     image = iTextSharp.text.Image.GetInstance(imagenes[i]);
                     EstablecerDimensiones(doc, image);
@@ -171,7 +159,7 @@ namespace MangaSharpPDF
             for (int i=0;i<carpetas.Length;i++)
             {
                 FileAttributes dir = File.GetAttributes(carpetas[i]);
-                if (dir.HasFlag(FileAttributes.Directory)) //Es un directorio
+                if (dir.HasFlag(FileAttributes.Directory) && inputCarpetaOrigen.Text.IndexOf(carpetas[i])==-1) //Es un directorio y filtra duplicados
                 {
                     inputCarpetaOrigen.Text += carpetas[i] + "\r\n";
                     if (inputNombrePDF.Text.CompareTo("") == 0)
@@ -180,6 +168,8 @@ namespace MangaSharpPDF
                     }
                 }
             }
+            procesarRutas();
+            mostrarMiniaturas();
         }
 
         private void inputCarpetaDestino_DragEnter(object sender, DragEventArgs e)
@@ -200,7 +190,6 @@ namespace MangaSharpPDF
 
         private void btnCerrar_Click(object sender, EventArgs e)
         {
-            //this.Close();
             Application.Exit();
         }
 
@@ -227,6 +216,42 @@ namespace MangaSharpPDF
         {
             ReleaseCapture();
             SendMessage(this.Handle, 0x112, 0xf012, 0);
+        }
+
+        private void procesarRutas()
+        {
+            //Reinicio de rutas de imagenes
+            imagenes = new string[0];
+            //Copia de las rutas
+            string origenTemp = inputCarpetaOrigen.Text; 
+
+            while (origenTemp.IndexOf("\r\n") != -1)
+            {
+                string rutaTemp = origenTemp.Substring(0, origenTemp.IndexOf("\r\n"));
+                origenTemp = origenTemp.Substring(origenTemp.IndexOf("\r\n") + 2);
+                imagenes = imagenes.Concat(Directory.GetFiles(rutaTemp)).ToArray(); //combinar string[] de imagenes
+            }
+        }
+
+        private void mostrarMiniaturas()
+        {
+            //Reinicio de flowlayout
+            flpImagenes.Controls.Clear();
+
+            //Mostrar miniaturas de imagenes
+            boxImagenes = new PictureBox[imagenes.Length];
+            for (int i = 0; i < imagenes.Length; i++)
+            {
+                if (ImageExtensions.Contains(Path.GetExtension(imagenes[i]).ToUpperInvariant()))
+                {
+                    boxImagenes[i] = new PictureBox();
+                    boxImagenes[i].Width = 240;
+                    boxImagenes[i].Height = 240;
+                    boxImagenes[i].SizeMode = PictureBoxSizeMode.Zoom;
+                    boxImagenes[i].Image = System.Drawing.Image.FromFile(imagenes[i]);
+                    flpImagenes.Controls.Add(boxImagenes[i]);
+                } 
+            }
         }
     }
 }
