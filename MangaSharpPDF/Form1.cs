@@ -183,5 +183,15 @@ namespace MangaSharpPDF
             string[] carpetas = (String[])e.Data.GetData(DataFormats.FileDrop, false);
             inputCarpetaDestino.Text = carpetas[0];
         }
+
+        private void MangaSharpPDF_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnCerrar_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }
