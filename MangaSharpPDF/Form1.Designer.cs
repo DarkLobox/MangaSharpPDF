@@ -77,10 +77,12 @@ namespace MangaSharpPDF
             // 
             this.inputCarpetaOrigen.AllowDrop = true;
             this.inputCarpetaOrigen.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.inputCarpetaOrigen.Cursor = System.Windows.Forms.Cursors.Default;
             this.inputCarpetaOrigen.Font = new System.Drawing.Font("Century Schoolbook", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.inputCarpetaOrigen.Location = new System.Drawing.Point(17, 46);
             this.inputCarpetaOrigen.Multiline = true;
             this.inputCarpetaOrigen.Name = "inputCarpetaOrigen";
+            this.inputCarpetaOrigen.ReadOnly = true;
             this.inputCarpetaOrigen.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.inputCarpetaOrigen.Size = new System.Drawing.Size(309, 94);
             this.inputCarpetaOrigen.TabIndex = 13;
@@ -147,9 +149,11 @@ namespace MangaSharpPDF
             // 
             this.inputCarpetaDestino.AllowDrop = true;
             this.inputCarpetaDestino.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.inputCarpetaDestino.Cursor = System.Windows.Forms.Cursors.Default;
             this.inputCarpetaDestino.Font = new System.Drawing.Font("Century Schoolbook", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.inputCarpetaDestino.Location = new System.Drawing.Point(16, 271);
             this.inputCarpetaDestino.Name = "inputCarpetaDestino";
+            this.inputCarpetaDestino.ReadOnly = true;
             this.inputCarpetaDestino.Size = new System.Drawing.Size(310, 21);
             this.inputCarpetaDestino.TabIndex = 7;
             this.inputCarpetaDestino.DragDrop += new System.Windows.Forms.DragEventHandler(this.inputCarpetaDestino_DragDrop);
@@ -326,7 +330,6 @@ namespace MangaSharpPDF
             this.MinimumSize = new System.Drawing.Size(865, 489);
             this.Name = "MangaSharpPDF";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Load += new System.EventHandler(this.MangaSharpPDF_Load);
             this.panelControles.ResumeLayout(false);
             this.panelControles.PerformLayout();
             this.panelBarra.ResumeLayout(false);

@@ -1,40 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System.Runtime.InteropServices;
+using System.Configuration;
 
 namespace MangaSharpPDF
 {
     public partial class MangaSharpPDF : Form
     {
         //Dimensiones de pagina
-        static iTextSharp.text.Rectangle d1 = new iTextSharp.text.Rectangle(1290, 1684);
-        static iTextSharp.text.Rectangle d2 = new iTextSharp.text.Rectangle(1684, 1290);
-        static iTextSharp.text.Rectangle d3 = new iTextSharp.text.Rectangle(1290, 842);
+        //static iTextSharp.text.Rectangle d1 = new iTextSharp.text.Rectangle(1290, 1684);
+        //static iTextSharp.text.Rectangle d2 = new iTextSharp.text.Rectangle(1684, 1290);
+        //static iTextSharp.text.Rectangle d3 = new iTextSharp.text.Rectangle(1290, 842);
 
-        static iTextSharp.text.Rectangle[] dimensiones = { d1, d2, d3 };
-
-        //Configuracion orientacion pagina
-        static int[] configuraciones = { 0, 2 }; //A4 Ancho de pagina uniforme
-        //static int[] configuraciones = { 0, 1 }; //A4 horizontal y vertical
+        //Configuraciones
+        static AppSettingsReader lector = new AppSettingsReader();
+        static int vw = (int)lector.GetValue("verticalWidth", typeof(int));
+        static int vh = (int)lector.GetValue("verticalHeight", typeof(int));
+        static int hw = (int)lector.GetValue("horizontalWidth", typeof(int));
+        static int hh = (int)lector.GetValue("horizontalHeight", typeof(int));
+        static Rectangle vertical = new Rectangle(vw, vh);
+        static Rectangle horizontal = new Rectangle(hw, hh);
 
         //Procesamiento
-        PictureBox[] boxImagenes;
+        PictureBox[] boxImagenes = new PictureBox[0];
         string[] imagenes = new string[0];
+        System.Drawing.Bitmap[] mapas = new System.Drawing.Bitmap[0];
 
         //Formato de imagenes permitidos
         public static readonly List<string> ImageExtensions = new List<string> { ".JPG", ".JPE", ".BMP", ".GIF", ".PNG" };
-
 
         //Movimiento de ventana
         [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
@@ -45,7 +43,6 @@ namespace MangaSharpPDF
         public MangaSharpPDF()
         {
             InitializeComponent();
-            this.MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;
         }
 
         private void btnGenerarPDF_Click(object sender, EventArgs e)
@@ -83,9 +80,8 @@ namespace MangaSharpPDF
         void generarPDF(string origen, string destino, string nombre)
         {
             //Variables
-            iTextSharp.text.Image image;
-
-            prbGenerarPDF.Value = 0;
+            Image image;
+            prbGenerarPDF.Value = 0; //reset barra de progreso
 
             //Creacion de doc sin tamaño de pagina definido
             Document doc = new Document();
@@ -96,7 +92,7 @@ namespace MangaSharpPDF
             doc.SetMargins(0, 0, 0, 0);
 
             //Establecer dimension primera pagina
-            image = iTextSharp.text.Image.GetInstance(imagenes[0]);
+            image = Image.GetInstance(imagenes[0]);
             //EstablecerDimensiones(doc, image);
 
             // Abrir pdf
@@ -108,7 +104,7 @@ namespace MangaSharpPDF
                 //Formatos permitidos
                 if (ImageExtensions.Contains(Path.GetExtension(imagenes[i]).ToUpperInvariant()))
                 {
-                    image = iTextSharp.text.Image.GetInstance(imagenes[i]);
+                    image = Image.GetInstance(imagenes[i]);
                     EstablecerDimensiones(doc, image);
                     doc.NewPage();
                     doc.Add(image);
@@ -121,23 +117,21 @@ namespace MangaSharpPDF
             writer.Close();
         }
 
-        void EstablecerDimensiones(Document doc, iTextSharp.text.Image image)
+        void EstablecerDimensiones(Document doc, Image image)
         {
             //0
             if (image.Height > image.Width)
             {
-                doc.SetPageSize(dimensiones[configuraciones[0]]);
-                image.ScaleAbsoluteWidth(dimensiones[configuraciones[0]].Width);
-                image.ScaleAbsoluteHeight(dimensiones[configuraciones[0]].Height);
-                //Debug.WriteLine("Ancho: " + dimensiones[configuraciones[0]].Width + " Largo: " + dimensiones[configuraciones[0]].Height);
+                doc.SetPageSize(vertical);
+                image.ScaleAbsoluteWidth(vertical.Width);
+                image.ScaleAbsoluteHeight(vertical.Height);
             }
             //1 o 2
             if (image.Width >= image.Height)
             {
-                doc.SetPageSize(dimensiones[configuraciones[1]]);
-                image.ScaleAbsoluteWidth(dimensiones[configuraciones[1]].Width);
-                image.ScaleAbsoluteHeight(dimensiones[configuraciones[1]].Height);
-                //Debug.WriteLine("Ancho: " + dimensiones[configuraciones[1]].Width + " Largo: " + dimensiones[configuraciones[1]].Height);
+                doc.SetPageSize(horizontal);
+                image.ScaleAbsoluteWidth(horizontal.Width);
+                image.ScaleAbsoluteHeight(horizontal.Height);
             }
 
         }
@@ -146,6 +140,8 @@ namespace MangaSharpPDF
         {
             inputCarpetaOrigen.Text = "";
             inputNombrePDF.Text = "";
+            limpiarMiniaturas();
+            
         }
 
         private void inputCarpetaOrigen_DragEnter(object sender, DragEventArgs e)
@@ -181,11 +177,6 @@ namespace MangaSharpPDF
         {
             string[] carpetas = (String[])e.Data.GetData(DataFormats.FileDrop, false);
             inputCarpetaDestino.Text = carpetas[0];
-        }
-
-        private void MangaSharpPDF_Load(object sender, EventArgs e)
-        {
-
         }
 
         private void btnCerrar_Click(object sender, EventArgs e)
@@ -235,11 +226,11 @@ namespace MangaSharpPDF
 
         private void mostrarMiniaturas()
         {
-            //Reinicio de flowlayout
-            flpImagenes.Controls.Clear();
+            limpiarMiniaturas();
 
-            //Mostrar miniaturas de imagenes
             boxImagenes = new PictureBox[imagenes.Length];
+            mapas = new System.Drawing.Bitmap[imagenes.Length];
+
             for (int i = 0; i < imagenes.Length; i++)
             {
                 if (ImageExtensions.Contains(Path.GetExtension(imagenes[i]).ToUpperInvariant()))
@@ -248,9 +239,20 @@ namespace MangaSharpPDF
                     boxImagenes[i].Width = 240;
                     boxImagenes[i].Height = 240;
                     boxImagenes[i].SizeMode = PictureBoxSizeMode.Zoom;
-                    boxImagenes[i].Image = System.Drawing.Image.FromFile(imagenes[i]);
+                    mapas[i] = new System.Drawing.Bitmap(imagenes[i]);
+                    boxImagenes[i].Image = mapas[i];
                     flpImagenes.Controls.Add(boxImagenes[i]);
                 } 
+            }
+        }
+
+        private void limpiarMiniaturas()
+        {
+            flpImagenes.Controls.Clear();
+            Array.Clear(boxImagenes, 0, boxImagenes.Length);
+            for (int i = 0; i < mapas.Length; i++)
+            {
+                mapas[i].Dispose();
             }
         }
     }
