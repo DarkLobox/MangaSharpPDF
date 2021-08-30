@@ -12,17 +12,16 @@ namespace MangaSharpPDF
 {
     public partial class MangaSharpPDF : Form
     {
-        //Dimensiones de pagina
-        //static iTextSharp.text.Rectangle d1 = new iTextSharp.text.Rectangle(1290, 1684);
-        //static iTextSharp.text.Rectangle d2 = new iTextSharp.text.Rectangle(1684, 1290);
-        //static iTextSharp.text.Rectangle d3 = new iTextSharp.text.Rectangle(1290, 842);
-
         //Configuraciones
         static AppSettingsReader lector = new AppSettingsReader();
         static int vw = (int)lector.GetValue("verticalWidth", typeof(int));
         static int vh = (int)lector.GetValue("verticalHeight", typeof(int));
         static int hw = (int)lector.GetValue("horizontalWidth", typeof(int));
         static int hh = (int)lector.GetValue("horizontalHeight", typeof(int));
+        static int formato = (int)lector.GetValue("formatoPagina", typeof(int));
+        static string ruta = (string)lector.GetValue("rutaDestinoDefecto", typeof(string));
+        static bool miniaturas = (bool)lector.GetValue("mostrarMiniaturas", typeof(bool));
+
         static Rectangle vertical = new Rectangle(vw, vh);
         static Rectangle horizontal = new Rectangle(hw, hh);
 
@@ -44,6 +43,7 @@ namespace MangaSharpPDF
         public MangaSharpPDF()
         {
             InitializeComponent();
+            inputCarpetaDestino.Text = ruta;
         }
 
         private void btnGenerarPDF_Click(object sender, EventArgs e)
@@ -120,21 +120,26 @@ namespace MangaSharpPDF
 
         void EstablecerDimensiones(Document doc, Image image)
         {
-            //0
-            if (image.Height > image.Width)
+            if (formato == 4)
             {
+                vertical = new Rectangle(image.Width, image.Height);
                 doc.SetPageSize(vertical);
-                image.ScaleAbsoluteWidth(vertical.Width);
-                image.ScaleAbsoluteHeight(vertical.Height);
             }
-            //1 o 2
-            if (image.Width >= image.Height)
+            else
             {
-                doc.SetPageSize(horizontal);
-                image.ScaleAbsoluteWidth(horizontal.Width);
-                image.ScaleAbsoluteHeight(horizontal.Height);
+                if (image.Height > image.Width)
+                {
+                    doc.SetPageSize(vertical);
+                    image.ScaleAbsoluteWidth(vertical.Width);
+                    image.ScaleAbsoluteHeight(vertical.Height);
+                }
+                if (image.Width >= image.Height)
+                {
+                    doc.SetPageSize(horizontal);
+                    image.ScaleAbsoluteWidth(horizontal.Width);
+                    image.ScaleAbsoluteHeight(horizontal.Height);
+                }
             }
-
         }
 
         private void btnLimpiar_Click(object sender, EventArgs e)
@@ -227,25 +232,27 @@ namespace MangaSharpPDF
 
         private void mostrarMiniaturas()
         {
-            limpiarMiniaturas();
-
-            boxImagenes = new PictureBox[imagenes.Length];
-            mapas = new System.Drawing.Bitmap[imagenes.Length];
-
-            for (int i = 0; i < imagenes.Length; i++)
+            if (miniaturas)
             {
-                if (ImageExtensions.Contains(Path.GetExtension(imagenes[i]).ToUpperInvariant()))
+                limpiarMiniaturas();
+                boxImagenes = new PictureBox[imagenes.Length];
+                mapas = new System.Drawing.Bitmap[imagenes.Length];
+
+                for (int i = 0; i < imagenes.Length; i++)
                 {
-                    boxImagenes[i] = new PictureBox();
-                    boxImagenes[i].Width = 240;
-                    boxImagenes[i].Height = 240;
-                    boxImagenes[i].SizeMode = PictureBoxSizeMode.Zoom;
-                    var image = System.Drawing.Image.FromFile(imagenes[i]);
-                    ScaleImage(i, image, 240, 240);
-                    image.Dispose();
-                    boxImagenes[i].Image = mapas[i];
-                    flpImagenes.Controls.Add(boxImagenes[i]);
-                } 
+                    if (ImageExtensions.Contains(Path.GetExtension(imagenes[i]).ToUpperInvariant()))
+                    {
+                        boxImagenes[i] = new PictureBox();
+                        boxImagenes[i].Width = 240;
+                        boxImagenes[i].Height = 240;
+                        boxImagenes[i].SizeMode = PictureBoxSizeMode.Zoom;
+                        var image = System.Drawing.Image.FromFile(imagenes[i]);
+                        ScaleImage(i, image, 240, 240);
+                        image.Dispose();
+                        boxImagenes[i].Image = mapas[i];
+                        flpImagenes.Controls.Add(boxImagenes[i]);
+                    }
+                }
             }
         }
 
@@ -268,6 +275,33 @@ namespace MangaSharpPDF
             {
                 mapas[i].Dispose();
             }
+        }
+
+        private void btnOptions_Click(object sender, EventArgs e)
+        {
+            Form formulario = new FormConfiguraciones();
+            formulario.ShowDialog();
+            //Codigo al cerra el formulario
+            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            vw = Int32.Parse(config.AppSettings.Settings["verticalWidth"].Value);
+            vh = Int32.Parse(config.AppSettings.Settings["verticalHeight"].Value);
+            hw = Int32.Parse(config.AppSettings.Settings["horizontalWidth"].Value);
+            hh = Int32.Parse(config.AppSettings.Settings["horizontalHeight"].Value);
+            
+            formato = Int32.Parse(config.AppSettings.Settings["formatoPagina"].Value);
+            miniaturas = Boolean.Parse(config.AppSettings.Settings["mostrarMiniaturas"].Value);
+
+            ruta = config.AppSettings.Settings["rutaDestinoDefecto"].Value;
+            inputCarpetaDestino.Text = ruta;
+
+            vertical = new Rectangle(vw, vh);
+            horizontal = new Rectangle(hw, hh);
+        }
+
+        private void labelTitulo_MouseDown(object sender, MouseEventArgs e)
+        {
+            ReleaseCapture();
+            SendMessage(this.Handle, 0x112, 0xf012, 0);
         }
     }
 }
