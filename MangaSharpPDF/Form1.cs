@@ -29,7 +29,8 @@ namespace MangaSharpPDF
         //Procesamiento
         PictureBox[] boxImagenes = new PictureBox[0];
         string[] imagenes = new string[0];
-        System.Drawing.Bitmap[] mapas = new System.Drawing.Bitmap[0];
+        static System.Drawing.Bitmap[] mapas = new System.Drawing.Bitmap[0];
+        static System.Drawing.Graphics g;
 
         //Formato de imagenes permitidos
         public static readonly List<string> ImageExtensions = new List<string> { ".JPG", ".JPE", ".BMP", ".GIF", ".PNG" };
@@ -239,17 +240,30 @@ namespace MangaSharpPDF
                     boxImagenes[i].Width = 240;
                     boxImagenes[i].Height = 240;
                     boxImagenes[i].SizeMode = PictureBoxSizeMode.Zoom;
-                    mapas[i] = new System.Drawing.Bitmap(imagenes[i]);
+                    var image = System.Drawing.Image.FromFile(imagenes[i]);
+                    ScaleImage(i, image, 240, 240);
+                    image.Dispose();
                     boxImagenes[i].Image = mapas[i];
                     flpImagenes.Controls.Add(boxImagenes[i]);
                 } 
             }
         }
 
+        static void ScaleImage(int i, System.Drawing.Image image, int maxWidth, int maxHeight) { 
+            var ratioX = (double)maxWidth / image.Width; 
+            var ratioY = (double)maxHeight / image.Height; 
+            var ratio = Math.Min(ratioX, ratioY); 
+            var newWidth = (int)(image.Width * ratio); 
+            var newHeight = (int)(image.Height * ratio);
+            mapas[i] = new System.Drawing.Bitmap(newWidth, newHeight);
+            g = System.Drawing.Graphics.FromImage(mapas[i]);
+            g.DrawImage(image, 0, 0, newWidth, newHeight);
+            g.Dispose();
+        }
+
         private void limpiarMiniaturas()
         {
             flpImagenes.Controls.Clear();
-            Array.Clear(boxImagenes, 0, boxImagenes.Length);
             for (int i = 0; i < mapas.Length; i++)
             {
                 mapas[i].Dispose();
