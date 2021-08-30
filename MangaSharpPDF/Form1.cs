@@ -26,7 +26,7 @@ namespace MangaSharpPDF
         static Rectangle vertical = new Rectangle(vw, vh);
         static Rectangle horizontal = new Rectangle(hw, hh);
 
-        //Procesamiento
+        //Procesamiento de minuaturas
         PictureBox[] boxImagenes = new PictureBox[0];
         string[] imagenes = new string[0];
         static System.Drawing.Bitmap[] mapas = new System.Drawing.Bitmap[0];

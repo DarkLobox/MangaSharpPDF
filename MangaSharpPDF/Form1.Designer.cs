@@ -43,11 +43,13 @@ namespace MangaSharpPDF
             this.label1 = new System.Windows.Forms.Label();
             this.inputNombrePDF = new System.Windows.Forms.TextBox();
             this.panelBarra = new System.Windows.Forms.Panel();
+            this.flpImagenes = new System.Windows.Forms.FlowLayoutPanel();
+            this.label4 = new System.Windows.Forms.Label();
+            this.btnOptions = new System.Windows.Forms.Button();
             this.btnRestaurar = new System.Windows.Forms.Button();
             this.btnMaximizar = new System.Windows.Forms.Button();
             this.btnMinimizar = new System.Windows.Forms.Button();
             this.btnCerrar = new System.Windows.Forms.Button();
-            this.flpImagenes = new System.Windows.Forms.FlowLayoutPanel();
             this.panelControles.SuspendLayout();
             this.panelBarra.SuspendLayout();
             this.SuspendLayout();
@@ -220,17 +222,53 @@ namespace MangaSharpPDF
             // panelBarra
             // 
             this.panelBarra.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(76)))), ((int)(((byte)(75)))), ((int)(((byte)(105)))));
+            this.panelBarra.Controls.Add(this.btnOptions);
+            this.panelBarra.Controls.Add(this.label4);
             this.panelBarra.Controls.Add(this.btnRestaurar);
             this.panelBarra.Controls.Add(this.btnMaximizar);
             this.panelBarra.Controls.Add(this.btnMinimizar);
             this.panelBarra.Controls.Add(this.btnCerrar);
             this.panelBarra.Cursor = System.Windows.Forms.Cursors.SizeAll;
             this.panelBarra.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelBarra.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(76)))), ((int)(((byte)(75)))), ((int)(((byte)(105)))));
             this.panelBarra.Location = new System.Drawing.Point(0, 0);
             this.panelBarra.Name = "panelBarra";
             this.panelBarra.Size = new System.Drawing.Size(854, 31);
             this.panelBarra.TabIndex = 3;
             this.panelBarra.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelBarra_MouseDown);
+            // 
+            // flpImagenes
+            // 
+            this.flpImagenes.AutoScroll = true;
+            this.flpImagenes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(49)))), ((int)(((byte)(69)))));
+            this.flpImagenes.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flpImagenes.Location = new System.Drawing.Point(0, 31);
+            this.flpImagenes.Name = "flpImagenes";
+            this.flpImagenes.Size = new System.Drawing.Size(516, 442);
+            this.flpImagenes.TabIndex = 5;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.label4.Location = new System.Drawing.Point(32, 7);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(115, 16);
+            this.label4.TabIndex = 4;
+            this.label4.Text = "MangaSharpPDF";
+            // 
+            // btnOptions
+            // 
+            this.btnOptions.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnOptions.Dock = System.Windows.Forms.DockStyle.Left;
+            this.btnOptions.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnOptions.Image = global::MangaSharpPDF.Properties.Resources.menu;
+            this.btnOptions.Location = new System.Drawing.Point(0, 0);
+            this.btnOptions.Name = "btnOptions";
+            this.btnOptions.Size = new System.Drawing.Size(26, 31);
+            this.btnOptions.TabIndex = 5;
+            this.btnOptions.UseVisualStyleBackColor = true;
             // 
             // btnRestaurar
             // 
@@ -305,16 +343,6 @@ namespace MangaSharpPDF
             this.btnCerrar.UseVisualStyleBackColor = false;
             this.btnCerrar.Click += new System.EventHandler(this.btnCerrar_Click);
             // 
-            // flpImagenes
-            // 
-            this.flpImagenes.AutoScroll = true;
-            this.flpImagenes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(49)))), ((int)(((byte)(69)))));
-            this.flpImagenes.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flpImagenes.Location = new System.Drawing.Point(0, 31);
-            this.flpImagenes.Name = "flpImagenes";
-            this.flpImagenes.Size = new System.Drawing.Size(516, 442);
-            this.flpImagenes.TabIndex = 5;
-            // 
             // MangaSharpPDF
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -333,6 +361,7 @@ namespace MangaSharpPDF
             this.panelControles.ResumeLayout(false);
             this.panelControles.PerformLayout();
             this.panelBarra.ResumeLayout(false);
+            this.panelBarra.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -356,6 +385,8 @@ namespace MangaSharpPDF
         private System.Windows.Forms.Button btnMaximizar;
         private System.Windows.Forms.Button btnMinimizar;
         private System.Windows.Forms.FlowLayoutPanel flpImagenes;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button btnOptions;
     }
 }
 
