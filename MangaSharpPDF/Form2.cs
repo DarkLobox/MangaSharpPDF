@@ -16,6 +16,7 @@ namespace MangaSharpPDF
         static int formato = (int)lector.GetValue("formatoPagina", typeof(int));
         static string ruta = (string)lector.GetValue("rutaDestinoDefecto", typeof(string));
         static bool miniaturas = (bool)lector.GetValue("mostrarMiniaturas", typeof(bool));
+        static bool compresion = (bool)lector.GetValue("compresionImagenes", typeof(bool));
 
         //Movimiento de ventana
         [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
@@ -57,6 +58,7 @@ namespace MangaSharpPDF
             }
             inputRutaDestinoDefecto.Text = ruta;
             cboxMostrarMiniaturas.Checked = miniaturas;
+            cboxCompresion.Checked = compresion;
         }
 
         private void guardarConfiguraciones()
@@ -98,10 +100,12 @@ namespace MangaSharpPDF
 
             config.AppSettings.Settings["rutaDestinoDefecto"].Value = inputRutaDestinoDefecto.Text.ToString();
             config.AppSettings.Settings["mostrarMiniaturas"].Value = cboxMostrarMiniaturas.Checked.ToString();
+            config.AppSettings.Settings["compresionImagenes"].Value = cboxCompresion.Checked.ToString();
             config.Save(ConfigurationSaveMode.Modified);
 
             ruta = inputRutaDestinoDefecto.Text;
             miniaturas = cboxMostrarMiniaturas.Checked;
+            compresion = cboxCompresion.Checked;
             this.Close();
         }
 
@@ -117,6 +121,8 @@ namespace MangaSharpPDF
             inputRutaDestinoDefecto.Text = "";
             miniaturas = true;
             cboxMostrarMiniaturas.Checked = true;
+            compresion = true;
+            cboxCompresion.Checked = true;
         }
 
         private void btnAplicarCambios_Click(object sender, EventArgs e)
@@ -245,6 +251,18 @@ namespace MangaSharpPDF
             else
             {
                 e.Handled = true;
+            }
+        }
+
+        private void cboxCompresion_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cboxCompresion.Checked == true)
+            {
+                compresion = true;
+            }
+            else
+            {
+                compresion = false;
             }
         }
     }

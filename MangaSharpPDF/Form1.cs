@@ -21,6 +21,7 @@ namespace MangaSharpPDF
         static int formato = (int)lector.GetValue("formatoPagina", typeof(int));
         static string ruta = (string)lector.GetValue("rutaDestinoDefecto", typeof(string));
         static bool miniaturas = (bool)lector.GetValue("mostrarMiniaturas", typeof(bool));
+        static bool compresion = (bool)lector.GetValue("compresionImagenes", typeof(bool));
 
         static Rectangle vertical = new Rectangle(vw, vh);
         static Rectangle horizontal = new Rectangle(hw, hh);
@@ -82,6 +83,7 @@ namespace MangaSharpPDF
         {
             //Variables
             Image image;
+            System.Drawing.Image imageOriginal;
             prbGenerarPDF.Value = 0; //reset barra de progreso
 
             //Creacion de doc sin tamaño de pagina definido
@@ -106,10 +108,23 @@ namespace MangaSharpPDF
                 if (ImageExtensions.Contains(Path.GetExtension(imagenes[i]).ToUpperInvariant()))
                 {
                     image = Image.GetInstance(imagenes[i]);
-                    EstablecerDimensiones(doc, image);
+                    imageOriginal = System.Drawing.Image.FromFile(imagenes[i]);
+                    EstablecerDimensiones(doc, image, imageOriginal, i);
+                    image = Image.GetInstance(imagenes[i]);
+
                     doc.NewPage();
                     doc.Add(image);
                     prbGenerarPDF.Value = ((i + 1) * 100) / imagenes.Length;
+                }
+            }
+
+            //Borrado de residuos
+            for (int i = 0; i < imagenes.Length; i++)
+            {
+                //Formatos permitidos
+                if (imagenes[i].IndexOf("resize")!=-1)
+                {
+                    File.Delete(imagenes[i]);
                 }
             }
 
@@ -118,7 +133,7 @@ namespace MangaSharpPDF
             writer.Close();
         }
 
-        void EstablecerDimensiones(Document doc, Image image)
+        void EstablecerDimensiones(Document doc, Image image, System.Drawing.Image imagenOriginal, int ruta)
         {
             if (formato == 4)
             {
@@ -132,14 +147,38 @@ namespace MangaSharpPDF
                     doc.SetPageSize(vertical);
                     image.ScaleAbsoluteWidth(vertical.Width);
                     image.ScaleAbsoluteHeight(vertical.Height);
+                    if (compresion)
+                    {
+                        imagenOriginal = Resize(imagenOriginal, (int)vertical.Width, (int)vertical.Height);
+                        String rutaTemporal = imagenes[ruta].Substring(0, imagenes[ruta].LastIndexOf("\\")) + "\\resize.jpg";
+                        imagenOriginal.Save(rutaTemporal);
+                        imagenes[ruta] = rutaTemporal;
+                    }
                 }
                 if (image.Width >= image.Height)
                 {
                     doc.SetPageSize(horizontal);
                     image.ScaleAbsoluteWidth(horizontal.Width);
                     image.ScaleAbsoluteHeight(horizontal.Height);
+                    if (compresion)
+                    {
+                        imagenOriginal = Resize(imagenOriginal,(int)horizontal.Width,(int)horizontal.Height);
+                        String rutaTemporal = imagenes[ruta].Substring(0, imagenes[ruta].LastIndexOf("\\")) + "\\resize.jpg";
+                        imagenOriginal.Save(rutaTemporal);
+                        imagenes[ruta] = rutaTemporal;
+                    }
                 }
             }
+        }
+
+        System.Drawing.Image Resize(System.Drawing.Image image, int w, int h)
+        {
+            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(w, h);
+            System.Drawing.Graphics graphic = System.Drawing.Graphics.FromImage(bmp);
+            graphic.DrawImage(image, 0, 0, w, h);
+            graphic.Dispose();
+
+            return bmp;
         }
 
         private void btnLimpiar_Click(object sender, EventArgs e)
@@ -246,7 +285,8 @@ namespace MangaSharpPDF
                         boxImagenes[i].Width = 240;
                         boxImagenes[i].Height = 240;
                         boxImagenes[i].SizeMode = PictureBoxSizeMode.Zoom;
-                        var image = System.Drawing.Image.FromFile(imagenes[i]);
+                        System.Drawing.Image image = System.Drawing.Image.FromFile(imagenes[i]);
+                        //Image prueba = Image.GetInstance(image,System.Drawing.Imaging.ImageFormat.Jpeg);
                         ScaleImage(i, image, 240, 240);
                         image.Dispose();
                         boxImagenes[i].Image = mapas[i];
@@ -281,7 +321,7 @@ namespace MangaSharpPDF
         {
             Form formulario = new FormConfiguraciones();
             formulario.ShowDialog();
-            //Codigo al cerra el formulario
+            //Codigo al cerrar el formulario
             Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             vw = Int32.Parse(config.AppSettings.Settings["verticalWidth"].Value);
             vh = Int32.Parse(config.AppSettings.Settings["verticalHeight"].Value);
@@ -290,7 +330,7 @@ namespace MangaSharpPDF
             
             formato = Int32.Parse(config.AppSettings.Settings["formatoPagina"].Value);
             miniaturas = Boolean.Parse(config.AppSettings.Settings["mostrarMiniaturas"].Value);
-
+            compresion = Boolean.Parse(config.AppSettings.Settings["compresionImagenes"].Value);
             ruta = config.AppSettings.Settings["rutaDestinoDefecto"].Value;
             inputCarpetaDestino.Text = ruta;
 

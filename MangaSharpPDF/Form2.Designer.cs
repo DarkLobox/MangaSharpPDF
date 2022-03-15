@@ -30,6 +30,7 @@ namespace MangaSharpPDF
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.cboxCompresion = new System.Windows.Forms.CheckBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.inputHorizontalH = new System.Windows.Forms.TextBox();
@@ -63,6 +64,7 @@ namespace MangaSharpPDF
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(43)))), ((int)(((byte)(60)))));
+            this.panel1.Controls.Add(this.cboxCompresion);
             this.panel1.Controls.Add(this.label7);
             this.panel1.Controls.Add(this.label8);
             this.panel1.Controls.Add(this.inputHorizontalH);
@@ -89,6 +91,19 @@ namespace MangaSharpPDF
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(369, 463);
             this.panel1.TabIndex = 0;
+            // 
+            // cboxCompresion
+            // 
+            this.cboxCompresion.AutoSize = true;
+            this.cboxCompresion.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cboxCompresion.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.cboxCompresion.Location = new System.Drawing.Point(185, 381);
+            this.cboxCompresion.Name = "cboxCompresion";
+            this.cboxCompresion.Size = new System.Drawing.Size(161, 19);
+            this.cboxCompresion.TabIndex = 33;
+            this.cboxCompresion.Text = "Compresion de Imagenes";
+            this.cboxCompresion.UseVisualStyleBackColor = true;
+            this.cboxCompresion.CheckedChanged += new System.EventHandler(this.cboxCompresion_CheckedChanged);
             // 
             // label7
             // 
@@ -433,5 +448,6 @@ namespace MangaSharpPDF
         private System.Windows.Forms.TextBox inputHorizontalW;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.CheckBox cboxCompresion;
     }
 }
