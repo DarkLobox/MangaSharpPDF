@@ -109,9 +109,9 @@ namespace MangaSharpPDF
                 {
                     image = Image.GetInstance(imagenes[i]);
                     imageOriginal = System.Drawing.Image.FromFile(imagenes[i]);
-                    EstablecerDimensiones(doc, image, imageOriginal, i);
+                    EstablecerDimensionesPre(doc, image, imageOriginal, i);
                     image = Image.GetInstance(imagenes[i]);
-
+                    EstablecerDimensionesPost(image);
                     doc.NewPage();
                     doc.Add(image);
                     prbGenerarPDF.Value = ((i + 1) * 100) / imagenes.Length;
@@ -125,15 +125,20 @@ namespace MangaSharpPDF
                 if (imagenes[i].IndexOf("resize")!=-1)
                 {
                     File.Delete(imagenes[i]);
+                    
                 }
             }
 
             //Cerrar pdf
             doc.Close();
             writer.Close();
+
+            inputCarpetaOrigen.Text = "";
+            inputNombrePDF.Text = "";
+            limpiarMiniaturas();
         }
 
-        void EstablecerDimensiones(Document doc, Image image, System.Drawing.Image imagenOriginal, int ruta)
+        void EstablecerDimensionesPre(Document doc, Image image, System.Drawing.Image imagenOriginal, int ruta)
         {
             if (formato == 4)
             {
@@ -145,37 +150,73 @@ namespace MangaSharpPDF
                 if (image.Height > image.Width)
                 {
                     doc.SetPageSize(vertical);
-                    image.ScaleAbsoluteWidth(vertical.Width);
-                    image.ScaleAbsoluteHeight(vertical.Height);
                     if (compresion)
                     {
+                        FileInfo pesoInicial, pesoFinal;
+                        pesoInicial = new FileInfo(imagenes[ruta]);
+
                         imagenOriginal = Resize(imagenOriginal, (int)vertical.Width, (int)vertical.Height);
                         String rutaTemporal = imagenes[ruta].Substring(0, imagenes[ruta].LastIndexOf("\\")) + "\\resize.jpg";
                         imagenOriginal.Save(rutaTemporal);
-                        imagenes[ruta] = rutaTemporal;
+                        pesoFinal = new FileInfo(rutaTemporal);
+                        if (pesoFinal.Length < pesoInicial.Length)
+                        {
+                            imagenes[ruta] = rutaTemporal;
+                        }
+                        
                     }
                 }
                 if (image.Width >= image.Height)
                 {
                     doc.SetPageSize(horizontal);
-                    image.ScaleAbsoluteWidth(horizontal.Width);
-                    image.ScaleAbsoluteHeight(horizontal.Height);
                     if (compresion)
                     {
+                        FileInfo pesoInicial, pesoFinal;
+                        pesoInicial = new FileInfo(imagenes[ruta]);
+
                         imagenOriginal = Resize(imagenOriginal,(int)horizontal.Width,(int)horizontal.Height);
                         String rutaTemporal = imagenes[ruta].Substring(0, imagenes[ruta].LastIndexOf("\\")) + "\\resize.jpg";
                         imagenOriginal.Save(rutaTemporal);
-                        imagenes[ruta] = rutaTemporal;
+                        pesoFinal = new FileInfo(rutaTemporal);
+                        if (pesoFinal.Length < pesoInicial.Length)
+                        {
+                            imagenes[ruta] = rutaTemporal;
+                        }
                     }
+                }
+            }
+        }
+
+        void EstablecerDimensionesPost(Image image)
+        {
+            if (formato == 4)
+            {
+                
+            }
+            else
+            {
+                if (image.Height > image.Width)
+                {
+                    image.ScaleAbsoluteWidth(vertical.Width);
+                    image.ScaleAbsoluteHeight(vertical.Height);
+                }
+                if (image.Width >= image.Height)
+                {
+                    image.ScaleAbsoluteWidth(horizontal.Width);
+                    image.ScaleAbsoluteHeight(horizontal.Height);
                 }
             }
         }
 
         System.Drawing.Image Resize(System.Drawing.Image image, int w, int h)
         {
-            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(w, h);
+            double factorCompresion = 1.7;
+            double nw = w/factorCompresion;
+            double nh = h/factorCompresion;
+
+            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap((int)nw, (int)nh);
             System.Drawing.Graphics graphic = System.Drawing.Graphics.FromImage(bmp);
-            graphic.DrawImage(image, 0, 0, w, h);
+            graphic.DrawImage(image, 0, 0, (int)nw, (int)nh);
             graphic.Dispose();
 
             return bmp;
